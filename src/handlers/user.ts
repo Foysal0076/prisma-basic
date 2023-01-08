@@ -46,3 +46,41 @@ export const getUserHandler = async (
     return Boom.badImplementation()
   }
 }
+
+export const deleteUserHandler = async (
+  request: Hapi.Request,
+  h: Hapi.ResponseToolkit
+) => {
+  const { prisma } = request.server.app
+  const id = parseInt(request.params.id as string, 10)
+
+  try {
+    await prisma.user.delete({
+      where: { id },
+    })
+    return h.response().code(204)
+  } catch (error) {
+    console.log(error)
+    return h.response().code(500)
+  }
+}
+
+export const updateUserHandler = async (
+  request: Hapi.Request,
+  h: Hapi.ResponseToolkit
+) => {
+  const { prisma } = request.server.app
+  const id = parseInt(request.params.id as string, 10)
+  const payload = request.payload as Partial<Prisma.UserUpdateInput>
+
+  try {
+    const updatedUser = await prisma.user.update({
+      where: { id: id },
+      data: payload,
+    })
+    return h.response(updatedUser).code(200)
+  } catch (error) {
+    console.log(error)
+    return h.response().code(500)
+  }
+}

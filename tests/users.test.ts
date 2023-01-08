@@ -57,4 +57,48 @@ describe('Status plugin', () => {
     const user = JSON.parse(response.payload)
     expect(user.id).toEqual(userId)
   })
+
+  test('update user fails with invalid id', async () => {
+    const response = await server.inject({
+      method: 'PUT',
+      url: '/users/df32',
+      payload: testUser,
+    })
+
+    expect(response.statusCode).toEqual(400)
+  })
+
+  test('update user', async () => {
+    const response = await server.inject({
+      method: 'PUT',
+      url: `/users/${userId}`,
+      payload: {
+        firstName: 'Updated',
+        lastName: 'User',
+      },
+    })
+
+    expect(response.statusCode).toEqual(200)
+    const user = JSON.parse(response.payload)
+    expect(user.firstName).toEqual('Updated')
+    expect(user.lastName).toEqual('User')
+  })
+
+  test('delete user fails with invalid user id parameter', async () => {
+    const response = await server.inject({
+      method: 'DELETE',
+      url: '/users/df32',
+    })
+
+    expect(response.statusCode).toEqual(400)
+  })
+
+  test('delete user', async () => {
+    const response = await server.inject({
+      method: 'DELETE',
+      url: `/users/${userId}`,
+    })
+
+    expect(response.statusCode).toEqual(204) //Request has been fulfilled, but there is no content to send back
+  })
 })

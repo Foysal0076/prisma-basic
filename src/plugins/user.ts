@@ -1,7 +1,12 @@
 import Hapi from '@hapi/hapi'
 import Joi from 'joi'
-import { getUserHandler, registerUserHandler } from '../handlers/user'
-import { createUserValidator } from '../validators/users'
+import {
+  deleteUserHandler,
+  getUserHandler,
+  registerUserHandler,
+  updateUserHandler,
+} from '../handlers/user'
+import { createUserValidator, updateUserValidator } from '../validators/users'
 
 const userPlugin: Hapi.Plugin<null> = {
   name: 'app/user',
@@ -28,6 +33,34 @@ const userPlugin: Hapi.Plugin<null> = {
             params: Joi.object({
               id: Joi.number().integer(),
             }),
+          },
+        },
+      }),
+      server.route({
+        method: 'DELETE',
+        path: '/users/{id}',
+        handler: deleteUserHandler,
+        options: {
+          validate: {
+            params: Joi.object({
+              id: Joi.number().integer(),
+            }),
+          },
+        },
+      }),
+      server.route({
+        method: 'PUT',
+        path: '/users/{id}',
+        handler: updateUserHandler,
+        options: {
+          validate: {
+            params: Joi.object({
+              id: Joi.number().integer(),
+            }),
+            payload: updateUserValidator,
+            failAction: (request, h, err) => {
+              throw err
+            },
           },
         },
       })

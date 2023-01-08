@@ -6,6 +6,13 @@ import statusPlugin from './plugins/status'
 const server: Hapi.Server = Hapi.server({
   port: process.env.PORT || 3000,
   host: process.env.HOST || 'localhost',
+  routes: {
+    payload: {
+      multipart: {
+        output: 'stream',
+      },
+    },
+  },
 })
 
 export const createServer = async (): Promise<Hapi.Server> => {
