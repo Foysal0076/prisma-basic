@@ -1,4 +1,6 @@
 import Hapi from '@hapi/hapi'
+import userPlugin from './plugins/user'
+import prismaPlugin from './plugins/prisma'
 import statusPlugin from './plugins/status'
 
 const server: Hapi.Server = Hapi.server({
@@ -7,7 +9,7 @@ const server: Hapi.Server = Hapi.server({
 })
 
 export const createServer = async (): Promise<Hapi.Server> => {
-  await server.register([statusPlugin])
+  await server.register([statusPlugin, prismaPlugin, userPlugin])
   await server.initialize()
   return server
 }

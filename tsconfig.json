@@ -1,9 +1,10 @@
 {
   "compilerOptions": {
-    "paths": {
-      "@/*": ["./src/*"],
-      "@/plugins/*": ["./src/plugins/*"]
-    },
+    // "baseUrl": "./src",
+    // "paths": {
+    //   "@/*": ["/*"],
+    //   "@/plugins/*": ["/plugins/*"]
+    // },
     "sourceMap": true,
     "outDir": "dist",
     "module": "commonjs",
