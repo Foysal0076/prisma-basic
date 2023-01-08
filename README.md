@@ -15,3 +15,12 @@
     //use
     import { PrismaClient } from '@prisma/client'
     const prisma = new PrismaClient()
+
+## _I want to seed my database from prisma/seed.ts file_
+
+    //add
+      "prisma": {
+        "seed": "ts-node prisma/seed.ts"
+      },
+    in package.json first
+    npx prisma db seed

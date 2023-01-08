@@ -7,13 +7,16 @@
   "license": "MIT",
   "scripts": {
     "dev": "ts-node-dev --respawn ./src/index.ts",
-    "seed": "prisma db seed ",
+    "seed": "npx prisma db seed",
     "seed:users": "ts-node ./src/seed-users.ts",
     "test": "jest",
     "postgres:start": "docker-compose up -d",
     "migrate:save": "prisma migrate --experimental save",
     "migrate:up": "prisma migrate --experimental up --auto-approve --create-db",
     "prisma:generate": "prisma generate"
+  },
+  "prisma": {
+    "seed": "ts-node prisma/seed.ts"
   },
   "dependencies": {
     "@prisma/client": "^4.8.1",
