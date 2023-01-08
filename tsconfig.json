@@ -1,7 +1,12 @@
 {
   "compilerOptions": {
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/plugins/*": ["./src/plugins/*"]
+    },
     "sourceMap": true,
     "outDir": "dist",
+    "module": "commonjs",
     "strict": true,
     "lib": ["esnext"],
     "esModuleInterop": true
