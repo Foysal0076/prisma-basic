@@ -1,6 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
   provider = "prisma-client-js"
 }
@@ -11,28 +8,61 @@ datasource db {
 }
 
 model User {
-  id        Int     @id @default(autoincrement())
-  email     String  @unique
-  firstName String?
-  lastName  String?
-  social    Json?
+  id          Int                @id @default(autoincrement())
+  email       String             @unique
+  firstName   String?
+  lastName    String?
+  role        UserRole           @default(STUDENT)
+  social      Json?
+  courses     CourseEnrollment[]
+  testResults TestResult[]       @relation(name: "results")
+  testsGraded TestResult[]       @relation(name: "graded")
 }
 
 model Course {
-  id            Int    @id @default(autoincrement())
+  id            Int                @id @default(autoincrement())
   name          String
-  courseDetails String
+  courseDetails String?
+  members       CourseEnrollment[]
+  tests          Test[]
+}
+
+model CourseEnrollment {
+  createdAt DateTime @default(now())
+  role      UserRole
+  User      User     @relation(fields: [userId], references: [id])
+  userId    Int
+  Course    Course   @relation(fields: [courseId], references: [id])
+  courseId  Int
+
+  @@id([userId, courseId])
+  @@index([userId, role])
 }
 
 model Test {
-  id        Int      @id @default(autoincrement())
-  updatedAt DateTime @updatedAt
-  name      String
-  date      DateTime
+  id          Int          @id @default(autoincrement())
+  updatedAt   DateTime     @updatedAt
+  name        String
+  date        DateTime
+  testResults TestResult[]
+  course      Course       @relation(fields: [courseId], references: [id])
+  courseId    Int
 }
 
 model TestResult {
   id        Int      @id @default(autoincrement())
   createdAt DateTime @default(now())
   result    Int
+  test      Test     @relation(fields: [testId], references: [id])
+  testId    Int
+  student   User     @relation(name: "results", fields: [studentId], references: [id])
+  studentId Int
+  grader    User     @relation(name: "graded", fields: [graderId], references: [id])
+  graderId  Int
+}
+
+enum UserRole {
+  STUDENT
+  TEACHER
+  ADMIN
 }
