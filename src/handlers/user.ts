@@ -1,3 +1,4 @@
+import Boom from '@hapi/boom'
 import Hapi from '@hapi/hapi'
 import { Prisma } from '@prisma/client'
 
@@ -21,5 +22,27 @@ export const registerUserHandler = async (
     //   return h.response(error.message).code(400)
     // }
     throw error
+  }
+}
+
+export const getUserHandler = async (
+  request: Hapi.Request,
+  h: Hapi.ResponseToolkit
+) => {
+  const { prisma } = request.server.app
+  const id = parseInt(request.params.id as string, 10)
+
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id },
+    })
+    //If no user is found, user=null; return 404
+    if (!user) {
+      return h.response().code(404)
+    }
+    return h.response(user).code(200)
+  } catch (error) {
+    console.log(error)
+    return Boom.badImplementation()
   }
 }

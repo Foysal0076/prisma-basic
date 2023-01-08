@@ -25,7 +25,7 @@ describe('Status plugin', () => {
       instagram: 'test.instagram.com',
     },
   }
-
+  let userId: number
   test('create user', async () => {
     const response = await server.inject({
       method: 'POST',
@@ -34,7 +34,27 @@ describe('Status plugin', () => {
     })
 
     expect(response.statusCode).toEqual(201)
-    const userId = JSON.parse(response.payload)?.id
+    userId = JSON.parse(response.payload)?.id
     expect(typeof userId === 'number').toBeTruthy()
+  })
+
+  test('get user returns 404 for non existent user', async () => {
+    const response = await server.inject({
+      method: 'GET',
+      url: '/users/9999',
+    })
+
+    expect(response.statusCode).toEqual(404)
+  })
+
+  test('get user returns user', async () => {
+    const response = await server.inject({
+      method: 'GET',
+      url: `/users/${userId}`,
+    })
+
+    expect(response.statusCode).toEqual(200)
+    const user = JSON.parse(response.payload)
+    expect(user.id).toEqual(userId)
   })
 })

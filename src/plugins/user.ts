@@ -1,5 +1,6 @@
 import Hapi from '@hapi/hapi'
-import { registerUserHandler } from '../handlers/user'
+import Joi from 'joi'
+import { getUserHandler, registerUserHandler } from '../handlers/user'
 import { createUserValidator } from '../validators/users'
 
 const userPlugin: Hapi.Plugin<null> = {
@@ -17,7 +18,19 @@ const userPlugin: Hapi.Plugin<null> = {
           },
         },
       },
-    })
+    }),
+      server.route({
+        method: 'GET',
+        path: '/users/{id}',
+        handler: getUserHandler,
+        options: {
+          validate: {
+            params: Joi.object({
+              id: Joi.number().integer(),
+            }),
+          },
+        },
+      })
   },
 }
 
