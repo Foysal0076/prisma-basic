@@ -8,6 +8,9 @@
 
     npx prisma migrate dev --name init
 
+## _Initiate Prisma_
+    npx prisma init
+
 ## _Hey prisma! I want to manually regenerate the client_
 
     npx prisma generate
