@@ -19,28 +19,29 @@ export const loginHandler = async (
   const emailToken = generateEmailToken(email)
 
   const tokenExpiration = add(new Date(), { minutes: EMAIL_TOKEN_EXPIRES_IN })
-
-  const createdToken = await prisma.token.create({
-    data: {
-      emailToken,
-      type: TokenType.EMAIL,
-      expiration: tokenExpiration,
-      user: {
-        connectOrCreate: {
-          create: {
-            email,
-          },
-          where: {
-            email,
+  console.log('tokenExpiration', tokenExpiration, email)
+  try {
+    const createdToken = await prisma.token.create({
+      data: {
+        emailToken,
+        type: TokenType.EMAIL,
+        expiration: tokenExpiration,
+        user: {
+          connectOrCreate: {
+            create: {
+              email,
+            },
+            where: {
+              email,
+            },
           },
         },
       },
-      
-    },
-  })
-
-  try {
-  } catch (error) {
+    })
+    await sendEmailToken(email, emailToken)
+    return h.response({ token: createdToken }).code(200)
+  } catch (error: any) {
+    console.log('Errrror', error.response.body)
     return Boom.badImplementation()
   }
 }
