@@ -26,7 +26,7 @@ const emailPlugin: Hapi.Plugin<null> = {
 const sendEmailToken = async (email: string, token: string) => {
   const message = {
     to: email,
-    from: 'EMAIL_ADDRESS_CONFIGURED_IN_SENDGRID@email.com',
+    from: process.env.SEND_GRID_SENDER_EMAIL || 'foysalahmed0075@gmail.com',
     subject: 'Login token for the modern backend api',
     text: 'Your login token is: ' + token,
   }

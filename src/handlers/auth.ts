@@ -38,7 +38,8 @@ export const loginHandler = async (
         },
       },
     })
-    await sendEmailToken(email, emailToken)
+    const response = await sendEmailToken(email, emailToken)
+    console.log('Sendgrid: ', response)
     return h.response({ token: createdToken }).code(200)
   } catch (error: any) {
     console.log('Errrror', error.response.body)
