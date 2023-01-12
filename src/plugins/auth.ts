@@ -1,10 +1,10 @@
 import Hapi from '@hapi/hapi'
 import Joi from 'joi'
-import { loginHandler } from '../handlers/auth'
+import { authenticateHandler, loginHandler } from '../handlers/auth'
 
 const authPlugin: Hapi.Plugin<null> = {
   name: 'app/auth',
-  // dependencies: ['prisma', 'hapi-auth-jwt2', 'app/email'],
+  dependencies: ['prisma', 'hapi-auth-jwt2', 'app/email'],
   register: async (server: Hapi.Server) => {
     server.route([
       {
@@ -21,6 +21,22 @@ const authPlugin: Hapi.Plugin<null> = {
             payload: Joi.object({
               email: Joi.string().email().required(),
             }),
+          },
+        },
+      },
+      {
+        method: 'POST',
+        path: '/authenticate',
+        handler: authenticateHandler,
+        options: {
+          validate: {
+            payload: Joi.object({
+              email: Joi.string().email().required(),
+              emailToken: Joi.string().required(),
+            }),
+            failAction: (request, h, err) => {
+              throw err
+            },
           },
         },
       },

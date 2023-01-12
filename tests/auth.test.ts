@@ -24,4 +24,29 @@ describe('Auth test suite', () => {
   //   expect(response.statusCode).toEqual(200)
 
   // })
+
+  test('set Authorization header failed because of expired email token', async () => {
+    const response = await server.inject({
+      method: 'POST',
+      url: '/authenticate',
+      payload: {
+        email: 'foysalxahmed@gmail.com',
+        emailToken: '83186556',
+      },
+    })
+
+    expect(response.statusCode).toEqual(401)
+  })
+
+  test('set Authorization header failed because of invalid email token', async () => {
+    const response = await server.inject({
+      method: 'POST',
+      url: '/authenticate',
+      payload: {
+        email: 'foysalxahmed@gmail.com',
+        emailToken: '831860000',
+      },
+    })
+    expect(response.statusCode).toEqual(401)
+  })
 })
