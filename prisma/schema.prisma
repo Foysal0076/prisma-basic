@@ -13,6 +13,7 @@ model User {
   firstName   String?
   lastName    String?
   role        UserRole           @default(STUDENT)
+  isAdmin     Boolean            @default(false)
   social      Json?
   courses     CourseEnrollment[]
   testResults TestResult[]       @relation(name: "results")
@@ -43,9 +44,9 @@ model Course {
 model CourseEnrollment {
   createdAt DateTime @default(now())
   role      UserRole
-  User      User     @relation(fields: [userId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
   userId    Int
-  Course    Course   @relation(fields: [courseId], references: [id])
+  course    Course   @relation(fields: [courseId], references: [id])
   courseId  Int
 
   @@id([userId, courseId])

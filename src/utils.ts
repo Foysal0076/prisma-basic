@@ -1,7 +1,7 @@
 import jwt from 'jsonwebtoken'
 
-const JWT_SECRET = process.env.JWT_SECRET || 'SUPER_SECRET_JWT'
-const JWT_ALGORITHM = 'HS256'
+export const JWT_SECRET = process.env.JWT_SECRET || 'SUPER_SECRET_JWT'
+export const JWT_ALGORITHM = 'HS256'
 
 export const generateEmailToken = (email: string): string => {
   return Math.floor(10000000 + Math.random() * 90000000).toString()
